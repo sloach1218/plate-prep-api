@@ -35,6 +35,20 @@ const RecipesService = {
       date_created: recipeData.date_created,
     }
   },
+  insertRecipe(db, newRecipe) {
+    return db
+      .insert(newRecipe)
+      .into('pp_recipes')
+      .returning('*')
+      .then(([recipe]) => recipe)
+      
+  },
+  deleteRecipe(db, id){
+    return db
+        .from('pp_recipes')
+        .where({id})
+        .delete()
+  },
 
   
 }

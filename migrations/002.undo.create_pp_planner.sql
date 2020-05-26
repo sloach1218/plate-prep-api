@@ -1,0 +1,2 @@
+
+DROP TABLE IF EXISTS pp_planner CASCADE;

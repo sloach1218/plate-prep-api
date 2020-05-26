@@ -5,6 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const recipesRouter = require('./recipes/recipes-router')
+const plannerRouter = require('./planner/planner-router')
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
   res.send('Hello, world!')
 })
 app.use('/api/recipes', recipesRouter)
+app.use('/api/planner', plannerRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response

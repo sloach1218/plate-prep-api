@@ -35,6 +35,25 @@ const PlannerService = {
       snack: dateData.snack,
     }
   },
+  insertMeal(db, newDate) {
+    return db
+      .insert(newDate)
+      .into('pp_planner')
+      .returning('*')
+      .then(([meal]) => meal)
+      
+  },
+  updateDate(db, date, newMeals){
+    return db
+        .into('pp_planner')
+        .where({date})
+        .update(newMeals)
+  },
+  getByDate(db, date) {
+    return PlannerService.getAllDates(db)
+      .where({date})
+      .first()
+  },
 
   
 }

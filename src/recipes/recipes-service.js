@@ -43,6 +43,12 @@ const RecipesService = {
       .then(([recipe]) => recipe)
       
   },
+  updateRecipe(db, id, newRecipeFields){
+    return db
+        .into('pp_recipes')
+        .where({id})
+        .update(newRecipeFields)
+  },
   deleteRecipe(db, id){
     return db
         .from('pp_recipes')

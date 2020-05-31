@@ -1,13 +1,15 @@
 const express = require('express')
 const RecipesService = require('./recipes-service')
+const { requireAuth } = require('../../middleware/jwt-auth')
+
 
 const recipesRouter = express.Router()
 const jsonBodyParser = express.json()
 
 recipesRouter
   .route('/')
-  .get((req, res, next) => {
-    RecipesService.getAllRecipes(req.app.get('db'))
+  .get(requireAuth, (req, res, next) => {
+    RecipesService.getByUserId(req.app.get('db'), req.user.id)
       .then(recipes => {
         res.json(RecipesService.serializeRecipes(recipes))
       })
@@ -15,10 +17,11 @@ recipesRouter
   
   })
 
-  .post(jsonBodyParser, (req, res, next) => {
+  .post(requireAuth, jsonBodyParser, (req, res, next) => {
     const { name, ingredients, directions } = req.body
     const newRecipe = { name, ingredients, directions }
 
+    newRecipe.user_id = req.user.id
 
     RecipesService.insertRecipe(
       req.app.get('db'),
@@ -32,7 +35,7 @@ recipesRouter
       .catch(next)
     })
 
-    .patch(jsonBodyParser, (req, res, next) => {
+    .patch(requireAuth, jsonBodyParser, (req, res, next) => {
       const { name, ingredients, directions } = req.body
       const recipeToUpdate = {  name, ingredients, directions }
       
@@ -56,7 +59,7 @@ recipesRouter
         .catch(next)
     })
 
-    .delete(jsonBodyParser, (req, res, next) => {
+    .delete(requireAuth, jsonBodyParser, (req, res, next) => {
       const { id } = req.body
       RecipesService.deleteRecipe(
         req.app.get('db'),

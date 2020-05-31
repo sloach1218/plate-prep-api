@@ -1,12 +1,14 @@
 const express = require('express')
 const PlannerService = require('./planner-service')
+const { requireAuth } = require('../../middleware/jwt-auth')
+
 
 const plannerRouter = express.Router()
 const jsonBodyParser = express.json()
 
 plannerRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     PlannerService.getAllDates(req.app.get('db'))
       .then(dates => {
         res.json(PlannerService.serializeDates(dates))
@@ -15,7 +17,7 @@ plannerRouter
   
   })
 
-  .post(jsonBodyParser, (req, res, next) => {
+  .post(requireAuth, jsonBodyParser, (req, res, next) => {
     const { date, breakfast, lunch, dinner, snack } = req.body
     const newMeal = { date, breakfast, lunch, dinner, snack }
 

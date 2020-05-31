@@ -15,6 +15,11 @@ const RecipesService = {
       )
       
   },
+  getByUserId(db, userId){
+    return RecipesService.getAllRecipes(db)
+      .where('recipe.user_id', userId)
+      
+  },
 
   
 

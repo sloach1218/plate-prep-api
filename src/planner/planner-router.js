@@ -9,7 +9,7 @@ const jsonBodyParser = express.json()
 plannerRouter
   .route('/')
   .get(requireAuth, (req, res, next) => {
-    PlannerService.getAllDates(req.app.get('db'))
+    PlannerService.getByUserId(req.app.get('db'), req.user.id)
       .then(dates => {
         res.json(PlannerService.serializeDates(dates))
       })
@@ -21,7 +21,8 @@ plannerRouter
     const { date, breakfast, lunch, dinner, snack } = req.body
     const newMeal = { date, breakfast, lunch, dinner, snack }
 
-    
+    newMeal.user_id = req.user.id
+
     PlannerService.getByDate(
       req.app.get('db'),
       date

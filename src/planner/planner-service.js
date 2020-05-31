@@ -15,6 +15,11 @@ const PlannerService = {
       )
       
   },
+  getByUserId(db, userId){
+    return PlannerService.getAllDates(db)
+      .where('date.user_id', userId)
+      
+  },
 
   
 

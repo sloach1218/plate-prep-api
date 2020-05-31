@@ -9,3 +9,8 @@ ALTER TABLE pp_recipes
   ADD COLUMN
     user_id INTEGER REFERENCES pp_users(id)
     ON DELETE SET NULL;
+
+ALTER TABLE pp_planner
+  ADD COLUMN
+    user_id INTEGER REFERENCES pp_users(id)
+    ON DELETE SET NULL;

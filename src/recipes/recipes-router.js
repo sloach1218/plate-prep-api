@@ -60,16 +60,23 @@ recipesRouter
     })
 
     .delete(requireAuth, jsonBodyParser, (req, res, next) => {
-      const { id } = req.body
+      const { id, name } = req.body
       RecipesService.deleteRecipe(
         req.app.get('db'),
         id
+      ).then( RecipesService.deleteRecipeFromPlanner(
+        req.app.get('db'),
+        name
       )
-        .then(numRowsAffected => {
-          res.status(204).end()
-        })
-        .catch(next)
+      .then(numRowsAffected => {
+        console.log(numRowsAffected)
+        res.status(204).end()
+      })
+      .catch(next)
+      )
     })
+
+    
 
 
 module.exports = recipesRouter

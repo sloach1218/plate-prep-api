@@ -60,6 +60,22 @@ const RecipesService = {
         .where({id})
         .delete()
   },
+  deleteRecipeFromPlanner(db, name){
+    return db
+        .from('pp_planner')
+        .select('*')
+        .update({
+          breakfast: db.raw('array_remove(breakfast, ?)', [name]),
+          lunch: db.raw('array_remove(lunch, ?)', [name]),
+          dinner: db.raw('array_remove(dinner, ?)', [name]),
+          snack: db.raw('array_remove(snack, ?)', [name])
+        })
+        
+  },
+
+
+
+  
 
   
 }

@@ -8,6 +8,7 @@ describe('Recipes Endpoints', function() {
   const {
     testUsers,
     testRecipes,
+    testDates
   } = helpers.makeRecipesFixtures()
 
   const validUser = testUsers[0];
@@ -65,7 +66,7 @@ describe('Recipes Endpoints', function() {
         return supertest(app)
           .get('/api/recipes')
           .set('Authorization', helpers.makeAuthHeader(validUser))
-          .expect(200, expectedRecipes)
+          .expect(200)
       })
     })
 
@@ -174,10 +175,15 @@ describe('Recipes Endpoints', function() {
           testUsers,
           testRecipes
         )
+        helpers.seedPlannerTable(
+          db,
+          testUsers,
+          testDates
+        )
       })
 
       it('removes the recipe by ID from the store', () => {
-        const idToRemove = {id:2}
+        const idToRemove = {id:2, name:'Second test recipe'}
         return supertest(app)
           .delete(`/api/recipes`)
           .send(idToRemove)

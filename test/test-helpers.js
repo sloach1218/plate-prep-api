@@ -71,6 +71,27 @@ function makeUsersArray() {
   ]
 }
 
+function makeDatesArray(users) {
+  return [
+    {
+      date: 'Monday, May 4th',
+      breakfast: ['First test recipe', 'Second test recipe'],
+      lunch: [],
+      dinner: ['First test recipe', 'Third test recipe'],
+      snack: ['Fourth test recipe'],
+      user_id: users[0].id,
+    },
+    {
+      date: 'Tuesday, May 5th',
+      breakfast: [],
+      lunch: [],
+      dinner: ['Third test recipe'],
+      snack: [],
+      user_id: users[1].id,
+    },
+  ]
+}
+
 
 
 
@@ -90,7 +111,19 @@ function makeExpectedRecipe(users, recipe) {
   }
 }
 
+function makeExpectedDate(users, date) {
+  const user = users
+    .find(user => user.id === date.user_id)
 
+  return {
+    date: date.date,
+    breakfast: date.breakfast,
+    lunch: date.lunch,
+    dinner: date.dinner,
+    snack: date.snack,
+    user: user.id,
+  }
+}
 
 
 
@@ -98,7 +131,8 @@ function makeExpectedRecipe(users, recipe) {
 function makeRecipesFixtures() {
   const testUsers = makeUsersArray()
   const testRecipes = makeRecipesArray(testUsers)
-  return { testUsers, testRecipes }
+  const testDates = makeDatesArray(testUsers)
+  return { testUsers, testRecipes, testDates }
 }
 
 
@@ -120,10 +154,25 @@ function seedRecipesTables(db, users, recipes) {
       db
         .into('pp_recipes')
         .insert(recipes)
-    )
-    
-   
+    )   
 }
+
+function seedPlannerTable(db, dates) {
+  return db
+    .into('pp_planner')
+    .insert(dates)
+}
+function seedDatesTable(db, users, dates) {
+  return db
+    .into('pp_users')
+    .insert(users)
+    .then(() =>
+      db
+        .into('pp_planner')
+        .insert(dates)
+    )   
+}
+
 function seedUsersTables(db, users) {
   return db
     .into('pp_users')
@@ -147,10 +196,14 @@ module.exports = {
   makeRecipesArray,
   makeExpectedRecipe,
   makeUsersArray,
+  makeDatesArray,
+  makeExpectedDate,
 
   makeRecipesFixtures,
   cleanTables,
   seedRecipesTables,
   seedUsersTables,
+  seedPlannerTable,
+  seedDatesTable,
   makeAuthHeader
 }

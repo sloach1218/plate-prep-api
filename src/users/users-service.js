@@ -4,6 +4,7 @@ const xss = require('xss')
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 
 const UsersService = {
+  //check if user already exists
   hasUserWithUserName(db, user_name) {
     return db('pp_users')
       .where({ user_name })

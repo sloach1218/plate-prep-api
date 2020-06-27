@@ -11,25 +11,17 @@ const PlannerService = {
         'date.lunch',
         'date.dinner',
         'date.snack',
-
       )
-      
   },
   getByUserId(db, userId){
     return PlannerService.getAllDates(db)
       .where('date.user_id', userId)
-      
   },
-
-  
-
   serializeDates(dates) {
     return dates.map(this.serializeDate)
   },
-
   serializeDate(date) {
     const dateTree = new Treeize()
-
     const dateData = dateTree.grow([ date ]).getData()[0]
 
     return {
@@ -46,7 +38,6 @@ const PlannerService = {
       .into('pp_planner')
       .returning('*')
       .then(([meal]) => meal)
-      
   },
   updateDate(db, date, newMeals){
     return db
@@ -59,11 +50,6 @@ const PlannerService = {
       .where({date})
       .first()
   },
-
-  
 }
-
-
-
 
 module.exports = PlannerService

@@ -11,25 +11,17 @@ const RecipesService = {
         'recipe.ingredients',
         'recipe.directions',
         'recipe.date_created',
-
       )
-      
   },
   getByUserId(db, userId){
     return RecipesService.getAllRecipes(db)
       .where('recipe.user_id', userId)
-      
   },
-
-  
-
   serializeRecipes(recipes) {
     return recipes.map(this.serializeRecipe)
   },
-
   serializeRecipe(recipe) {
     const recipeTree = new Treeize()
-
     const recipeData = recipeTree.grow([ recipe ]).getData()[0]
 
     return {
@@ -46,7 +38,6 @@ const RecipesService = {
       .into('pp_recipes')
       .returning('*')
       .then(([recipe]) => recipe)
-      
   },
   updateRecipe(db, id, newRecipeFields){
     return db
@@ -60,6 +51,7 @@ const RecipesService = {
         .where({id})
         .delete()
   },
+  //remove all instances of a deleted recipe from the meal planner
   deleteRecipeFromPlanner(db, name){
     return db
         .from('pp_planner')
@@ -70,17 +62,7 @@ const RecipesService = {
           dinner: db.raw('array_remove(dinner, ?)', [name]),
           snack: db.raw('array_remove(snack, ?)', [name])
         })
-        
   },
-
-
-
-  
-
-  
 }
-
-
-
 
 module.exports = RecipesService

@@ -9,12 +9,12 @@ const jsonBodyParser = express.json()
 plannerRouter
   .route('/')
   .get(requireAuth, (req, res, next) => {
+    //get meal plan associated with logged in user
     PlannerService.getByUserId(req.app.get('db'), req.user.id)
       .then(dates => {
         res.json(PlannerService.serializeDates(dates))
       })
       .catch(next)
-  
   })
 
   .post(requireAuth, jsonBodyParser, (req, res, next) => {
@@ -23,6 +23,7 @@ plannerRouter
 
     newMeal.user_id = req.user.id
 
+    //check if meal planner date exists, if does - update it, if not - create it
     PlannerService.getByDate(
       req.app.get('db'),
       date
@@ -51,10 +52,6 @@ plannerRouter
             .catch(next)
         }
       })
-
-    
-
-    
   })
 
   

@@ -9,6 +9,7 @@ usersRouter
   .post('/', jsonBodyParser, (req, res, next) => {
     const { password, user_name } = req.body
 
+    //check that username and password exist
     for (const field of ['user_name', 'password'])
       if (!req.body[field])
         return res.status(400).json({
@@ -17,6 +18,7 @@ usersRouter
 
     const passwordError = UsersService.validatePassword(password)
 
+    //check that password is valid and username doesn't exist already, if no error - create new user
     if (passwordError)
       return res.status(400).json({ error: passwordError })
       console.log(passwordError)
@@ -35,7 +37,6 @@ usersRouter
               password: hashedPassword,
               date_created: 'now()',
             }
-
             return UsersService.insertUser(
               req.app.get('db'),
               newUser
